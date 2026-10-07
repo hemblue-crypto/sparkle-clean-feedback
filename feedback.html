@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sparkle Clean - Customer Feedback</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #eef8ff, #f4fff8);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #18324a;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 35px 28px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 7px;
+      background: linear-gradient(90deg, #168bd4, #35b96b, #f5c542);
+    }
+
+    /* Logo */
+    .logo-icon {
+      width: 75px;
+      height: 75px;
+      margin: 5px auto 10px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+    }
+
+    .logo-icon::before {
+      content: "✨";
+      position: absolute;
+      top: -8px;
+      left: 0;
+      font-size: 23px;
+    }
+
+    .logo-icon::after {
+      content: "✨";
+      position: absolute;
+      bottom: -5px;
+      right: 0;
+      font-size: 20px;
+    }
+
+    .logo-main {
+      font-size: 42px;
+    }
+
+    .brand {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .brand span:first-child {
+      color: #147fc1;
+    }
+
+    .brand span:last-child {
+      color: #35a957;
+    }
+
+    .tagline {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #63798b;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #172f49;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #718293;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .rating-box {
+      background: #f5fbff;
+      border: 1px solid #e0eef7;
+      border-radius: 20px;
+      padding: 22px 15px;
+      margin-bottom: 22px;
+    }
+
+    .rating-title {
+      font-size: 14px;
+      color: #50687a;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      direction: ltr;
+    }
+
+    .star {
+      font-size: 38px;
+      color: #d7dee5;
+      cursor: pointer;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .star:hover {
+      transform: scale(1.1);
+    }
+
+    .star.active {
+      color: #f5bd27;
+    }
+
+    .rating-message {
+      margin-top: 10px;
+      min-height: 20px;
+      font-size: 13px;
+      color: #60778a;
+    }
+
+    .comment-label {
+      display: block;
+      text-align: left;
+      font-size: 14px;
+      color: #50687a;
+      font-weight: 600;
+      margin-bottom: 9px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 1px solid #dce7ee;
+      border-radius: 15px;
+      padding: 15px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      color: #243b53;
+      background: #fbfdff;
+      transition: 0.2s ease;
+    }
+
+    textarea:focus {
+      border-color: #4da8d8;
+      box-shadow: 0 0 0 3px rgba(77, 168, 216, 0.12);
+    }
+
+    textarea::placeholder {
+      color: #9aa9b5;
+    }
+
+    .submit-btn {
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      padding: 16px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #27a85a, #35bd69);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 8px 18px rgba(53, 189, 105, 0.25);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(53, 189, 105, 0.32);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-message {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .status-success {
+      display: block;
+      background: #ecfbf1;
+      color: #237a43;
+      border: 1px solid #c8efd5;
+    }
+
+    .status-error {
+      display: block;
+      background: #fff1f1;
+      color: #b33a3a;
+      border: 1px solid #f2cccc;
+    }
+
+    .footer {
+      margin-top: 25px;
+      color: #718293;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .brand {
+        font-size: 30px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .star {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Logo -->
+    <div class="logo-icon">
+      <div class="logo-main">🧹</div>
+    </div>
+
+    <div class="brand">
+      <span>Sparkle</span>
+      <span>Clean</span> ✨
+    </div>
+
+    <div class="tagline">
+      CLEAN SPACES • HAPPIER PLACES
+    </div>
+
+    <h1>How was your experience?</h1>
+
+    <p class="subtitle">
+      Your feedback helps us improve our cleaning service
+      and serve you better.
+    </p>
+
+    <!-- Rating -->
+    <div class="rating-box">
+
+      <div class="rating-title">
+        Please rate your experience
+      </div>
+
+      <div class="stars">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+      </div>
+
+      <div class="rating-message" id="ratingMessage">
+        Select a rating
+      </div>
+
+    </div>
+
+    <!-- Comment -->
+    <label class="comment-label" for="comment">
+      Tell us about your experience (Optional)
+    </label>
+
+    <textarea
+      id="comment"
+      placeholder="We’d love to hear about your experience with us."
+    ></textarea>
+
+    <!-- Submit -->
+    <button class="submit-btn" id="submitBtn">
+      Submit Feedback
+    </button>
+
+    <!-- Status -->
+    <div id="statusMessage" class="status-message"></div>
+
+    <div class="footer">
+      ♥ Thank you for choosing Sparkle Clean!
+    </div>
+
+  </div>
+
+  <script>
+
+    // =========================================
+    // GET FEEDBACK TOKEN FROM URL
+    // =========================================
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const token = urlParams.get("token");
+
+    console.log("Feedback Token:", token);
+
+
+    // =========================================
+    // RATING SYSTEM
+    // =========================================
+
+    const stars = document.querySelectorAll(".star");
+
+    const ratingMessage =
+      document.getElementById("ratingMessage");
+
+    const commentInput =
+      document.getElementById("comment");
+
+    const submitBtn =
+      document.getElementById("submitBtn");
+
+    const statusMessage =
+      document.getElementById("statusMessage");
+
+
+    let selectedRating = 0;
+
+
+    const ratingTexts = {
+      1: "We’re sorry to hear that.",
+      2: "We appreciate your feedback.",
+      3: "Thank you for your feedback.",
+      4: "Glad you had a good experience!",
+      5: "Thank you! We’re thrilled! ⭐"
+    };
+
+
+    stars.forEach((star) => {
+
+      star.addEventListener("click", () => {
+
+        selectedRating =
+          Number(star.dataset.rating);
+
+        stars.forEach((s) => {
+
+          const rating =
+            Number(s.dataset.rating);
+
+          s.classList.toggle(
+            "active",
+            rating <= selectedRating
+          );
+
+        });
+
+        ratingMessage.textContent =
+          ratingTexts[selectedRating];
+
+      });
+
+    });
+
+
+    // =========================================
+    // SUBMIT FEEDBACK
+    // =========================================
+
+    submitBtn.addEventListener("click", async () => {
+
+      // Rating validation
+      if (!selectedRating) {
+
+        statusMessage.className =
+          "status-message status-error";
+
+        statusMessage.textContent =
+          "Please select a rating before submitting.";
+
+        return;
+
+      }
+
+
+      // Token validation
+      if (!token) {
+
+        statusMessage.className =
+          "status-message status-error";
+
+        statusMessage.textContent =
+          "This feedback link is invalid or missing.";
+
+        return;
+
+      }
+
+
+      // =======================================
+      // FEEDBACK DATA
+      // =======================================
+
+      const feedbackData = {
+
+        token: token,
+
+        rating: selectedRating,
+
+        comment: commentInput.value.trim(),
+
+        feedbackSubmittedAt:
+          new Date().toISOString()
+
+      };
+
+
+      console.log(
+        "Feedback Data:",
+        feedbackData
+      );
+
+
+      // Disable button
+      submitBtn.disabled = true;
+
+      submitBtn.textContent =
+        "Submitting...";
+
+
+      try {
+
+        // =====================================
+        // SEND DATA TO N8N WEBHOOK
+        // =====================================
+
+        const response = await fetch(
+          "http://localhost:5678/webhook-test/customer-feedback",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(feedbackData)
+          }
+        );
+
+
+        const responseText =
+          await response.text();
+
+
+        console.log(
+          "Webhook Response:",
+          responseText
+        );
+
+
+        if (!response.ok) {
+          throw new Error(
+            "Webhook request failed: " +
+            response.status
+          );
+        }
+
+
+        // =====================================
+        // SUCCESS
+        // =====================================
+
+        statusMessage.className =
+          "status-message status-success";
+
+        statusMessage.textContent =
+          "Thank you for your feedback! Your response has been submitted successfully. ❤️";
+
+        submitBtn.textContent =
+          "Feedback Submitted ✓";
+
+
+        // Disable form after successful submission
+        stars.forEach((star) => {
+          star.style.pointerEvents = "none";
+        });
+
+        commentInput.disabled = true;
+
+
+      } catch (error) {
+
+        console.error(
+          "Webhook Error:",
+          error
+        );
+
+
+        statusMessage.className =
+          "status-message status-error";
+
+        statusMessage.textContent =
+          "We couldn’t submit your feedback right now. Please try again.";
+
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent =
+          "Submit Feedback";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
