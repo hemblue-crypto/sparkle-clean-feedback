@@ -511,26 +511,38 @@
         }
 
 
-        // =====================================
-        // SUCCESS
-        // =====================================
+       
+const result = JSON.parse(responseText);
 
-        statusMessage.className =
-          "status-message status-success";
+// Duplicate feedback
+if (result.success === false) {
+  statusMessage.className =
+    "status-message status-error";
 
-        statusMessage.textContent =
-          "Thank you for your feedback! Your response has been submitted successfully. ❤️";
+  statusMessage.textContent =
+    result.message ||
+    "You have already submitted your feedback.";
 
-        submitBtn.textContent =
-          "Feedback Submitted ✓";
+  return;
+}
 
+// Successful first submission
+statusMessage.className =
+  "status-message status-success";
 
-        // Disable form after successful submission
-        stars.forEach((star) => {
-          star.style.pointerEvents = "none";
-        });
+statusMessage.textContent =
+  result.message ||
+  "Thank you for your feedback! Your response has been submitted successfully. ❤️";
 
-        commentInput.disabled = true;
+submitBtn.textContent = "Feedback Submitted ✓";
+
+// Disable form after successful submission
+stars.forEach((star) => {
+  star.style.pointerEvents = "none";
+});
+
+commentInput.disabled = true;
+submitBtn.disabled = true;
 
 
       } catch (error) {
